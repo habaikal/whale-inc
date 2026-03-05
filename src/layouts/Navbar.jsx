@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
-import { Activity, Bell, Menu, X } from 'lucide-react';
+import { Activity, Bell, Menu, X, HelpCircle } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { HelpCenterModal } from '../components/ui/HelpCenterModal';
 
 export const Navbar = ({ activeTab, setActiveTab }) => {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
+    const [isHelpOpen, setIsHelpOpen] = useState(false);
     const tabs = ['Dashboard', 'Stocks', 'Crypto', 'Dividends', 'AI Consensus'];
 
     return (
@@ -42,6 +44,13 @@ export const Navbar = ({ activeTab, setActiveTab }) => {
                     </div>
 
                     <div className="flex items-center gap-4">
+                        <button
+                            onClick={() => setIsHelpOpen(true)}
+                            className="hidden md:flex items-center gap-2 p-2 hover:text-cyan-400 text-slate-400 hover:bg-white/5 rounded-full transition-colors font-bold text-sm tracking-wider uppercase"
+                        >
+                            <HelpCircle size={18} />
+                            <span>Help Center</span>
+                        </button>
                         <button className="p-2 hover:bg-white/5 rounded-full transition-colors relative">
                             <Bell size={20} />
                             <span className="absolute top-2 right-2 w-2 h-2 bg-red-500 rounded-full border-2 border-[#020617]"></span>
@@ -85,6 +94,8 @@ export const Navbar = ({ activeTab, setActiveTab }) => {
                     </motion.div>
                 )}
             </AnimatePresence>
+
+            <HelpCenterModal isOpen={isHelpOpen} onClose={() => setIsHelpOpen(false)} />
         </>
     );
 };
