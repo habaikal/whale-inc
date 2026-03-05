@@ -7,6 +7,7 @@ import { CryptoHunter } from './components/sections/CryptoHunter';
 import { AIConsensus } from './components/sections/AIConsensus';
 import { MarketSentiment } from './components/sections/MarketSentiment';
 import { DividendHub } from './components/sections/DividendHub';
+import { RiskRewardCalculator } from './components/sections/RiskRewardCalculator';
 import { GlassCard } from './components/ui/LayoutComponents';
 import { motion } from 'framer-motion';
 
@@ -57,6 +58,14 @@ function App() {
                 <AIConsensus />
               </motion.div>
             </div>
+
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.5 }}
+            >
+              <RiskRewardCalculator />
+            </motion.div>
           </div>
 
           {/* Right Column: Sentiment & Dividends */}
