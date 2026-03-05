@@ -1,7 +1,8 @@
+/* eslint-disable react-hooks/set-state-in-effect */
 import React, { useState, useEffect, useRef } from 'react';
-import { Bot, Play, Square, ShieldAlert, CheckCircle2, Zap, Loader2, ArrowRight } from 'lucide-react';
+import { Bot, Play, Square, ShieldAlert, CheckCircle2, Zap, Loader2, ArrowRight, Activity } from 'lucide-react';
 import { SectionTitle, GlassCard } from '../ui/LayoutComponents';
-import { motion, AnimatePresence } from 'framer-motion';
+import { AnimatePresence, motion } from 'framer-motion';
 
 const STEPS = [
     { id: 1, name: "Macro Check", desc: "물때 파악 중..." },
@@ -33,13 +34,7 @@ export const AutoTraderBot = () => {
     useEffect(() => {
         let timer;
         if (isRunning) {
-            if (currentStep === 0) {
-                setLogs([]);
-                setSignal(null);
-                setBoughtStatus(null);
-                addLog("퀀트 자동매매 봇을 시작합니다. (5-Step Algorithm)", 'info');
-                timer = setTimeout(() => setCurrentStep(1), 1000);
-            } else if (currentStep <= 5) {
+            if (currentStep > 0 && currentStep <= 5) {
                 const stepInfo = STEPS[currentStep - 1];
                 addLog(`[Step ${stepInfo.id}] ${stepInfo.name}: ${stepInfo.desc}`, 'warning');
 
@@ -81,8 +76,12 @@ export const AutoTraderBot = () => {
         if (isRunning) {
             setIsRunning(false);
         } else {
+            setLogs([]);
+            setSignal(null);
+            setBoughtStatus(null);
+            setLogs([{ time: new Date().toLocaleTimeString(), msg: "퀀트 자동매매 봇을 시작합니다. (5-Step Algorithm)", type: 'info' }]);
             setIsRunning(true);
-            setCurrentStep(0);
+            setCurrentStep(1);
         }
     };
 
@@ -116,7 +115,7 @@ export const AutoTraderBot = () => {
                     <button
                         onClick={toggleRun}
                         className={`flex items-center gap-2 px-4 py-2 rounded-lg font-black text-sm transition-all shadow-lg active:scale-95 ${isRunning ? 'bg-rose-500/20 text-rose-400 border border-rose-500/50 hover:bg-rose-500/30' :
-                                'bg-cyan-500 text-slate-950 hover:bg-cyan-400 hover:shadow-[0_0_20px_rgba(34,211,238,0.5)]'
+                            'bg-cyan-500 text-slate-950 hover:bg-cyan-400 hover:shadow-[0_0_20px_rgba(34,211,238,0.5)]'
                             }`}
                     >
                         {isRunning ? <><Square size={16} /> STOP</> : <><Play size={16} /> START BOT</>}
@@ -134,8 +133,8 @@ export const AutoTraderBot = () => {
                             return (
                                 <div key={step.id} className="flex flex-col items-center gap-2 relative z-10">
                                     <div className={`w-8 h-8 rounded-full flex items-center justify-center font-black text-xs transition-all duration-500 ${isActive ? 'bg-cyan-500 text-slate-950 shadow-[0_0_15px_rgba(34,211,238,0.8)] scale-110' :
-                                            isPassed ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/50' :
-                                                'bg-[#020617] text-slate-600 border border-white/10'
+                                        isPassed ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/50' :
+                                            'bg-[#020617] text-slate-600 border border-white/10'
                                         }`}>
                                         {isPassed && !isActive ? <CheckCircle2 size={14} /> : step.id}
                                     </div>
@@ -157,8 +156,8 @@ export const AutoTraderBot = () => {
                             <div key={i} className="flex gap-3">
                                 <span className="text-slate-500 shrink-0">[{log.time}]</span>
                                 <span className={`${log.type === 'error' ? 'text-rose-400' :
-                                        log.type === 'success' ? 'text-emerald-400' :
-                                            log.type === 'warning' ? 'text-yellow-400' : 'text-cyan-100'
+                                    log.type === 'success' ? 'text-emerald-400' :
+                                        log.type === 'warning' ? 'text-yellow-400' : 'text-cyan-100'
                                     }`}>
                                     {log.msg}
                                 </span>
