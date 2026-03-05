@@ -8,6 +8,7 @@ import { AIConsensus } from './components/sections/AIConsensus';
 import { MarketSentiment } from './components/sections/MarketSentiment';
 import { DividendHub } from './components/sections/DividendHub';
 import { RiskRewardCalculator } from './components/sections/RiskRewardCalculator';
+import { AutoTraderBot } from './components/sections/AutoTraderBot';
 import { GlassCard } from './components/ui/LayoutComponents';
 import { motion } from 'framer-motion';
 
@@ -26,7 +27,15 @@ function App() {
       <Navbar activeTab={activeTab} setActiveTab={setActiveTab} />
 
       {/* Main Content */}
-      <main className="max-w-7xl mx-auto px-4 py-8 relative z-10">
+      <main className="max-w-7xl mx-auto px-4 py-8 relative z-10 space-y-8">
+        <motion.div
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6 }}
+        >
+          <AutoTraderBot />
+        </motion.div>
+
         <MarketTicker />
 
         <div className="grid grid-cols-1 xl:grid-cols-3 gap-8">
