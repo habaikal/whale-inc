@@ -10,7 +10,7 @@ import { DividendHub } from './components/sections/DividendHub';
 import { RiskRewardCalculator } from './components/sections/RiskRewardCalculator';
 import { AutoTraderBot } from './components/sections/AutoTraderBot';
 import { GlassCard } from './components/ui/LayoutComponents';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 
 function App() {
   const [activeTab, setActiveTab] = useState('dashboard');
@@ -28,76 +28,71 @@ function App() {
 
       {/* Main Content */}
       <main className="max-w-7xl mx-auto px-4 py-8 relative z-10 space-y-8">
-        <motion.div
-          initial={{ opacity: 0, y: -20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
-        >
-          <AutoTraderBot />
-        </motion.div>
-
-        <MarketTicker />
-
-        <div className="grid grid-cols-1 xl:grid-cols-3 gap-8">
-
-          {/* Left Column: Smart Money & AI */}
-          <div className="xl:col-span-2 space-y-8 flex flex-col">
+        {activeTab === 'dashboard' && (
+          <AnimatePresence mode="wait">
             <motion.div
-              initial={{ opacity: 0, y: 30 }}
+              initial={{ opacity: 0, y: -20 }}
               animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -20 }}
               transition={{ duration: 0.6 }}
-              className="flex-1"
+              className="space-y-8"
             >
+              <AutoTraderBot />
+              <MarketTicker />
+
+              <div className="grid grid-cols-1 xl:grid-cols-3 gap-8">
+                {/* Left Column: Smart Money & AI */}
+                <div className="xl:col-span-2 space-y-8 flex flex-col">
+                  <SmartMoneyScanner />
+                  <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                    <CryptoHunter />
+                    <AIConsensus />
+                  </div>
+                  <RiskRewardCalculator />
+                </div>
+
+                {/* Right Column: Sentiment & Dividends */}
+                <div className="space-y-8 flex flex-col">
+                  <MarketSentiment />
+                  <DividendHub />
+                </div>
+              </div>
+            </motion.div>
+          </AnimatePresence>
+        )}
+
+        {activeTab === 'stocks' && (
+          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="space-y-8">
+            <MarketTicker />
+            <div className="grid grid-cols-1 xl:grid-cols-2 gap-8">
               <SmartMoneyScanner />
-            </motion.div>
-
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-              <motion.div
-                initial={{ opacity: 0, x: -30 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ duration: 0.6, delay: 0.2 }}
-              >
-                <CryptoHunter />
-              </motion.div>
-              <motion.div
-                initial={{ opacity: 0, scale: 0.95 }}
-                animate={{ opacity: 1, scale: 1 }}
-                transition={{ duration: 0.6, delay: 0.4 }}
-              >
-                <AIConsensus />
-              </motion.div>
-            </div>
-
-            <motion.div
-              initial={{ opacity: 0, y: 30 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.5 }}
-            >
               <RiskRewardCalculator />
-            </motion.div>
-          </div>
+            </div>
+          </motion.div>
+        )}
 
-          {/* Right Column: Sentiment & Dividends */}
-          <div className="space-y-8 flex flex-col">
-            <motion.div
-              initial={{ opacity: 0, x: 30 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.6, delay: 0.3 }}
-              className="flex-1"
-            >
-              <MarketSentiment />
-            </motion.div>
-            <motion.div
-              initial={{ opacity: 0, y: 30 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.5 }}
-              className="flex-1"
-            >
-              <DividendHub />
-            </motion.div>
-          </div>
+        {activeTab === 'crypto' && (
+          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="space-y-8">
+            <MarketTicker />
+            <div className="grid grid-cols-1 xl:grid-cols-2 gap-8">
+              <CryptoHunter />
+              <RiskRewardCalculator />
+            </div>
+          </motion.div>
+        )}
 
-        </div>
+        {activeTab === 'dividends' && (
+          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="max-w-4xl mx-auto space-y-8">
+            <DividendHub />
+          </motion.div>
+        )}
+
+        {activeTab === 'aiconsensus' && (
+          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="grid grid-cols-1 xl:grid-cols-2 gap-8">
+            <AIConsensus />
+            <MarketSentiment />
+          </motion.div>
+        )}
       </main>
 
       {/* Quick Action Footer (Mobile) */}
